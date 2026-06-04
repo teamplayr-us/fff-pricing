@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Organizations — Flag Football Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16302B;
+    --ink-soft:#1E3A34;
+    --slate:#27403A;
+    --field:#34C759;
+    --field-deep:#2BA84A;
+    --field-soft:#E8F7EC;
+    --paper:#FFFFFF;
+    --paper-2:#F6F9F7;
+    --chalk:#FFFFFF;
+    --line:#E4EAE7;
+    --muted:#5E726C;
+    --gold:#F2A93B;
+    --card:#FFFFFF;
+    --navy:#16302B;
+    --navy-2:#1E3A34;
+    --field-bright:#34C759;
+    --accent:#34C759;
+    --shadow:0 16px 44px -20px rgba(22,48,43,.18);
+    --shadow-pop:0 24px 60px -22px rgba(52,199,89,.42);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Archivo',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--chalk);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+  /* ---- NAV ---- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+  .logo .mark{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--field),var(--field-deep));
+    display:grid;place-items:center;font-family:'Anton';font-size:20px;color:#fff;
+    transform:rotate(-4deg);
+  }
+  .logo b{font-family:'Anton';font-size:20px;letter-spacing:.5px}
+  .logo span{color:var(--field-deep)}
+  .nav-cta{
+    font-weight:700;font-size:14px;color:#fff;
+    background:var(--field);padding:11px 20px;border-radius:9px;
+    text-decoration:none;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 20px -6px rgba(52,199,89,.55)}
+
+  /* ---- HERO ---- */
+  header{
+    position:relative;
+    background:
+      radial-gradient(900px 420px at 82% -10%, rgba(52,199,89,.10), transparent 60%),
+      linear-gradient(180deg,#FFFFFF,#F6F9F7);
+    color:var(--ink);padding:80px 0 96px;overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  header::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(22,48,43,.025) 0 1px, transparent 1px 110px);
+    mask:linear-gradient(180deg,transparent,#000 30%,#000 75%,transparent);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--field-deep);
+    border:1px solid rgba(52,199,89,.3);background:var(--field-soft);
+    padding:8px 16px;border-radius:100px;margin-bottom:28px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--field);box-shadow:0 0 0 4px rgba(52,199,89,.2)}
+  h1{
+    font-family:'Anton';font-weight:400;line-height:.96;letter-spacing:-.5px;
+    font-size:clamp(44px,7vw,86px);max-width:14ch;text-transform:uppercase;color:var(--ink);
+  }
+  h1 .hl{color:var(--field-deep);position:relative;white-space:nowrap}
+  h1 .hl::after{
+    content:"";position:absolute;left:0;right:0;bottom:6px;height:13px;
+    background:var(--field);opacity:.28;z-index:-1;transform:skewX(-12deg);
+  }
+  .sub{
+    font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:56ch;
+    margin:26px 0 38px;line-height:1.55;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{
+    font-weight:800;font-size:16px;text-decoration:none;border-radius:11px;
+    padding:16px 30px;display:inline-flex;align-items:center;gap:10px;
+    transition:transform .15s ease, box-shadow .15s ease;cursor:pointer;border:none;
+  }
+  .btn-primary{background:var(--field);color:#fff;box-shadow:var(--shadow-pop)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--field);transform:translateY(-2px)}
+  .hero-note{margin-top:18px;font-size:14px;color:var(--muted)}
+  .hero-note b{color:var(--ink)}
+
+  /* stat strip */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;margin-top:64px;box-shadow:var(--shadow);
+  }
+  .stat{background:#fff;padding:24px 22px}
+  .stat .n{font-family:'Anton';font-size:34px;color:var(--field-deep);line-height:1}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:7px;font-weight:600}
+
+  /* ---- HOW (lead flow) ---- */
+  .section{padding:92px 0}
+  .kicker{
+    font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--field);margin-bottom:14px;
+  }
+  .h2{font-family:'Anton';font-weight:400;font-size:clamp(32px,4.4vw,52px);line-height:1;text-transform:uppercase;letter-spacing:-.5px}
+  .lead{font-size:18px;color:var(--muted);max-width:60ch;margin-top:18px;line-height:1.6}
+
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:54px}
+  .flow-card{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 26px;
+    position:relative;box-shadow:var(--shadow);
+  }
+  .flow-card .step{
+    font-family:'Anton';font-size:15px;color:#fff;background:var(--ink);
+    width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:18px;
+  }
+  .flow-card.green .step{background:var(--field)}
+  .flow-card h3{font-size:20px;font-weight:800;margin-bottom:9px}
+  .flow-card p{color:var(--muted);font-size:15px;line-height:1.6}
+
+  /* ---- PRICING ---- */
+  #pricing{background:linear-gradient(180deg,#fff, #EEF2F6)}
+  .toggle{
+    display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:100px;
+    padding:5px;margin:30px 0 8px;gap:4px;box-shadow:var(--shadow);
+  }
+  .toggle button{
+    border:none;background:transparent;font-family:'Archivo';font-weight:700;font-size:15px;
+    padding:10px 22px;border-radius:100px;cursor:pointer;color:var(--muted);transition:.18s;
+  }
+  .toggle button.on{background:var(--navy);color:#fff}
+  .save-tag{font-size:13px;font-weight:700;color:var(--field);margin-left:8px}
+
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:42px;align-items:start}
+  .tier{
+    background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 30px;
+    box-shadow:var(--shadow);position:relative;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .tier:hover{transform:translateY(-4px)}
+  .tier.pop{
+    border:2px solid var(--field);box-shadow:var(--shadow-pop);
+    background:linear-gradient(180deg,#fff,#F6FCF8);
+  }
+  .tier.elite{background:linear-gradient(180deg,#fff,var(--paper-2));color:var(--ink);border:2px solid var(--ink)}
+  .ribbon{
+    position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+    background:var(--field);color:#fff;font-weight:800;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;padding:7px 16px;border-radius:100px;white-space:nowrap;
+    box-shadow:0 8px 18px -6px rgba(52,199,89,.55);
+  }
+  .ribbon.gold{background:var(--ink);color:#fff}
+  .t-name{font-family:'Anton';font-size:26px;text-transform:uppercase;letter-spacing:.5px}
+  .tier.elite .t-name{color:var(--ink)}
+  .t-for{font-size:13.5px;color:var(--muted);font-weight:600;margin-top:6px;min-height:38px}
+  .tier.elite .t-for{color:var(--muted)}
+  .price{display:flex;align-items:baseline;gap:6px;margin:22px 0 4px}
+  .price .amt{font-family:'Anton';font-size:54px;line-height:.9}
+  .price .per{font-size:15px;color:var(--muted);font-weight:600}
+  .tier.elite .price .per{color:var(--muted)}
+  .price-sub{font-size:13.5px;color:var(--muted);font-weight:600;min-height:20px}
+  .tier.elite .price-sub{color:var(--muted)}
+  .t-cta{
+    display:block;text-align:center;font-weight:800;font-size:15.5px;text-decoration:none;
+    padding:14px;border-radius:11px;margin:24px 0 26px;transition:transform .15s ease;
+  }
+  .t-cta:hover{transform:translateY(-2px)}
+  .cta-free{background:var(--paper-2);color:var(--ink);border:1.5px solid var(--line)}
+  .cta-pro{background:var(--field);color:#fff;box-shadow:0 12px 26px -10px rgba(52,199,89,.55)}
+  .cta-elite{background:var(--ink);color:#fff;box-shadow:0 12px 26px -10px rgba(22,48,43,.45)}
+  .feats{list-style:none;display:flex;flex-direction:column;gap:13px}
+  .feats li{display:flex;gap:11px;font-size:14.5px;line-height:1.45;align-items:flex-start}
+  .feats .ic{
+    flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--field-soft);
+    color:var(--field-deep);display:grid;place-items:center;font-size:12px;font-weight:900;margin-top:1px;
+  }
+  .tier.elite .feats .ic{background:var(--field-soft);color:var(--field-deep)}
+  .feats .muted{color:var(--muted)}
+  .tier.elite .feats li{color:var(--ink)}
+  .feat-strong{font-weight:800}
+
+  .universal{
+    margin-top:34px;background:var(--field-soft);border:1px solid rgba(52,199,89,.25);border-radius:14px;
+    padding:20px 26px;display:flex;align-items:center;gap:16px;
+  }
+  .universal .icon{
+    flex-shrink:0;width:38px;height:38px;border-radius:10px;background:var(--field);color:#fff;
+    display:grid;place-items:center;font-weight:900;font-size:18px;
+  }
+  .universal .copy{color:var(--ink);font-size:14.5px;line-height:1.5}
+  .universal .copy b{color:var(--ink)}
+  .universal .copy .fees{color:var(--muted);font-size:13px;display:block;margin-top:2px}
+  @media(max-width:600px){.universal{flex-direction:column;align-items:flex-start;text-align:left}}
+
+  /* ---- SEASONAL ---- */
+  .season{
+    margin-top:34px;background:linear-gradient(135deg,var(--field-soft),#fff);
+    color:var(--ink);border:1px solid var(--line);border-radius:22px;
+    padding:46px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;
+    position:relative;overflow:hidden;box-shadow:var(--shadow);
+  }
+  .season::after{
+    content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle,rgba(52,199,89,.18),transparent 70%);
+  }
+  .season h3{font-family:'Anton';font-size:30px;text-transform:uppercase;line-height:1.05;margin-bottom:14px}
+  .season p{color:var(--muted);font-size:15.5px;line-height:1.6}
+  .season .gold{color:var(--field-deep)}
+  .season-points{list-style:none;display:flex;flex-direction:column;gap:16px}
+  .season-points li{display:flex;gap:13px;font-size:15px;align-items:flex-start;color:var(--ink)}
+  .season-points .ic{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:var(--field);color:#fff;display:grid;place-items:center;font-weight:900;font-size:14px}
+
+  /* ---- FAQ ---- */
+  .faq{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:48px}
+  .qa{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 26px;box-shadow:var(--shadow)}
+  .qa h4{font-size:17px;font-weight:800;margin-bottom:9px}
+  .qa p{color:var(--muted);font-size:15px;line-height:1.6}
+
+  /* ---- CLOSER ---- */
+  .closer{
+    background:linear-gradient(135deg,var(--field-deep),var(--field));
+    text-align:center;padding:84px 28px;color:#fff;position:relative;overflow:hidden;
+  }
+  .closer::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 90px);
+  }
+  .closer h2{font-family:'Anton';font-size:clamp(34px,5vw,60px);text-transform:uppercase;line-height:1;position:relative}
+  .closer p{font-size:18px;max-width:50ch;margin:18px auto 32px;font-weight:600;position:relative;color:rgba(255,255,255,.92)}
+  .closer .btn-primary{background:var(--ink);color:#fff;position:relative;box-shadow:0 16px 40px -16px rgba(0,0,0,.4)}
+
+  footer{background:var(--ink);color:#9DB0AB;padding:40px 0;font-size:14px}
+  .foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  .foot-in .logo{color:#fff}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .flow,.tiers,.faq{grid-template-columns:1fr}
+    .season{grid-template-columns:1fr;padding:34px}
+    .tier.pop{order:-1}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a href="#" class="logo"><span class="mark">F</span><b>Flag<span>Football</span>Finder</b></a>
+    <a href="#pricing" class="nav-cta">See Plans</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <h1 class="reveal">Families are searching.<br><span class="hl">Get found first.</span></h1>
+    <p class="sub reveal">Flag Football Finder is where parents look before they pick a league. We send those families straight to your teams and events — so you spend less time chasing signups and more time running ball.</p>
+    <div class="hero-ctas reveal">
+      <a href="#pricing" class="btn btn-primary">List your organization →</a>
+      <a href="#how" class="btn btn-ghost">How it works</a>
+    </div>
+    <p class="hero-note reveal">Start free. <b>List unlimited teams in minutes.</b> No setup fees.</p>
+
+    <div class="stats reveal">
+      <div class="stat"><div class="n">150K+</div><div class="l">Monthly family searches</div></div>
+      <div class="stat"><div class="n">1,500</div><div class="l">Organizations</div></div>
+      <div class="stat"><div class="n">$0</div><div class="l">To get started</div></div>
+      <div class="stat"><div class="n">Year-round</div><div class="l">Families searching every season</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="kicker reveal">The demand is already here</div>
+    <h2 class="h2 reveal">You don't generate the demand.<br>You just need to catch it.</h2>
+    <p class="lead reveal">Every season, parents type "flag football near me" before they know a single league by name. We rank for those searches. Your job is simply to be the org we hand them to.</p>
+
+    <div class="flow">
+      <div class="flow-card green reveal"><div class="step">1</div><h3>Families find us</h3><p>Parents search for flag football in your area and land on Flag Football Finder — at the exact moment they're deciding where to play.</p></div>
+      <div class="flow-card green reveal"><div class="step">2</div><h3>We route them to you</h3><p>Your teams and events show up in their results. Interested families send a lead straight to your inbox — name, contact, and what they're looking for.</p></div>
+      <div class="flow-card green reveal"><div class="step">3</div><h3>You fill your rosters</h3><p>You follow up and sign them up. No ad spend, no cold outreach — just warm families who came looking for exactly what you offer.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="wrap" style="text-align:center">
+    <div class="kicker reveal">Plans for organizations</div>
+    <h2 class="h2 reveal">Pick the plan that fits your season</h2>
+    <div class="toggle reveal" id="billingToggle">
+      <button class="on" data-mode="monthly">Monthly</button>
+      <button data-mode="annual">Annual <span class="save-tag">save ~15%</span></button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="tiers">
+
+      <!-- FREE -->
+      <div class="tier reveal">
+        <div class="t-name">Free</div>
+        <div class="t-for">For orgs getting started and testing the waters.</div>
+        <div class="price"><span class="amt">$0</span><span class="per">/forever</span></div>
+        <div class="price-sub">&nbsp;</div>
+        <a href="#" class="t-cta cta-free">List for free</a>
+        <ul class="feats">
+          <li><span class="ic">✓</span><span><span class="feat-strong">Unlimited team listings</span></span></li>
+          <li><span class="ic">✓</span><span>Up to <span class="feat-strong">1 lead per month</span> <span class="muted">(no guarantee)</span></span></li>
+          <li><span class="ic">✓</span><span>Standard placement in search results</span></li>
+          <li><span class="ic">✓</span><span class="muted">Events &amp; tournaments not included</span></li>
+        </ul>
+      </div>
+
+      <!-- PRO -->
+      <div class="tier pop reveal">
+        <div class="ribbon">Most Popular</div>
+        <div class="t-name">Grow</div>
+        <div class="t-for">For clubs and leagues that want every family we send.</div>
+        <div class="price"><span class="amt" data-monthly="$29" data-annual="$299">$29</span><span class="per" data-monthly="/month" data-annual="/year">/month</span></div>
+        <div class="price-sub" data-monthly="Billed monthly · cancel anytime" data-annual="$299/yr billed once — beat the seasonal churn">Billed monthly · cancel anytime</div>
+        <a href="#" class="t-cta cta-pro">Start Grow</a>
+        <ul class="feats">
+          <li><span class="ic">✓</span><span><span class="feat-strong">Unlimited team listings</span></span></li>
+          <li><span class="ic">✓</span><span>List <span class="feat-strong">1 event</span> — camp, tournament, or league</span></li>
+          <li><span class="ic">✓</span><span><span class="feat-strong">Unlimited leads</span> — teams &amp; event</span></li>
+          <li><span class="ic">✓</span><span>Featured placement for teams &amp; event</span></li>
+          <li><span class="ic">✓</span><span><span class="feat-strong">Data dashboard</span> — see your lead volume &amp; where families come from</span></li>
+        </ul>
+      </div>
+
+      <!-- ELITE -->
+      <div class="tier elite reveal">
+        <div class="ribbon gold">For Serious Operators</div>
+        <div class="t-name">Pro</div>
+        <div class="t-for">For event operators and training academies — anyone running programs year-round.</div>
+        <div class="price"><span class="amt" data-monthly="$59" data-annual="$599">$59</span><span class="per" data-monthly="/month" data-annual="/year">/month</span></div>
+        <div class="price-sub" data-monthly="Billed monthly · cancel anytime" data-annual="$599/yr billed once — best value">Billed monthly · cancel anytime</div>
+        <a href="#" class="t-cta cta-elite">Go Pro</a>
+        <ul class="feats">
+          <li><span class="ic">✓</span><span>Everything in <span class="feat-strong">Grow</span></span></li>
+          <li><span class="ic">✓</span><span><span class="feat-strong">Unlimited events</span> — camps, tournaments &amp; leagues</span></li>
+          <li><span class="ic">✓</span><span><span class="feat-strong">Unlimited private training listings</span> — clinics, skills sessions, academies</span></li>
+          <li><span class="ic">✓</span><span>Featured placement across every team &amp; event</span></li>
+          <li><span class="ic">✓</span><span>Full data dashboard</span></li>
+          <li><span class="ic">✓</span><span><span class="feat-strong">1-on-1 white-glove onboarding</span> + marketing strategy session</span></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="universal reveal">
+      <div class="icon">+</div>
+      <div class="copy">
+        <b>Every plan includes roster, registration &amp; payment management.</b> Collect from families through FFF on any tier — Free, Grow, or Pro.
+        <span class="fees">Payment and platform fees apply.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="season reveal">
+      <div>
+        <h3>Built for the <span class="gold">off-season</span>, too.</h3>
+        <p>Flag football has a rhythm — busy seasons, quiet stretches. Most tools go dark when your season ends. We don't. Families search year-round, and your dashboard turns the slow months into planning months.</p>
+      </div>
+      <ul class="season-points">
+        <li><span class="ic">↻</span><span>Annual plans lock in your spot through the whole year — no re-subscribing every season.</span></li>
+        <li><span class="ic">📊</span><span>Your dashboard shows last season's demand so you can plan the next one with real numbers.</span></li>
+        <li><span class="ic">⚡</span><span>Early-bird families keep finding you in the off-season, so leads never fully stop.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="kicker reveal">Questions</div>
+    <h2 class="h2 reveal">The straight answers</h2>
+    <div class="faq">
+      <div class="qa reveal"><h4>What exactly is a "lead"?</h4><p>A family that found your team or event on Flag Football Finder and reached out — you get their name, contact info, and what they're looking for, straight to your inbox.</p></div>
+      <div class="qa reveal"><h4>Why is Free capped at one lead?</h4><p>Free gets you listed and seen. Once families start reaching out regularly, Grow unlocks every one of them — most orgs upgrade the first time they hit the cap mid-season.</p></div>
+      <div class="qa reveal"><h4>What makes Pro worth it?</h4><p>If you run multiple camps, tournaments, leagues, or private training programs, Grow's single event listing won't cut it. Pro lists them all, features them, and comes with onboarding to get the most out of every one.</p></div>
+      <div class="qa reveal"><h4>Can I cancel anytime?</h4><p>Yes on monthly. But annual plans save you ~15% and mean you never lose your placement when your season quiets down — which is when most orgs regret cancelling.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="closer">
+  <h2>Stop chasing signups.</h2>
+  <p>Get listed today and let the families already searching come to you.</p>
+  <a href="#pricing" class="btn btn-primary">List your organization →</a>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <a href="#" class="logo"><span class="mark">F</span><b>Flag<span>Football</span>Finder</b></a>
+    <span>© 2026 Flag Football Finder · The discovery layer for youth flag football.</span>
+  </div>
+</footer>
+
+<script>
+  // billing toggle
+  const toggle=document.getElementById('billingToggle');
+  toggle.addEventListener('click',e=>{
+    const btn=e.target.closest('button'); if(!btn)return;
+    const mode=btn.dataset.mode;
+    toggle.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===btn));
+    document.querySelectorAll('[data-'+mode+']').forEach(el=>{
+      el.textContent=el.getAttribute('data-'+mode);
+    });
+  });
+  // scroll reveal
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach((en,i)=>{ if(en.isIntersecting){ en.target.style.transitionDelay=(i%3*70)+'ms'; en.target.classList.add('in'); io.unobserve(en.target);} });
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
